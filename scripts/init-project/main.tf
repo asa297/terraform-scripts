@@ -16,14 +16,12 @@ module "gcp_project" {
   billing_account = var.billing_account
 }
 
-
 # เรียกใช้งาน Module ที่ 2: ตั้งค่า Firebase
 module "firebase_auth" {
   source = "../../modules/firebase-auth"
 
   project_id = module.gcp_project.project_id
 }
-
 
 # 5. เรียกใช้งาน Module ที่ 5: สร้าง Cloud Storage Bucket
 module "artifact_storage" {
