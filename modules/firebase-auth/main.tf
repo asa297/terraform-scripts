@@ -36,7 +36,8 @@ resource "google_project_service" "project_apis" {
 
   # Don't disable the service if the resource block is removed by accident.
   # disable_on_destroy = false
-  disable_on_destroy = true # ปิดการใช้งาน API เมื่อ resource นี้ถูกลบ
+  disable_on_destroy         = true # ปิดการใช้งาน API เมื่อ resource นี้ถูกลบ
+  disable_dependent_services = true
 }
 
 # เพิ่ม Firebase ไปยัง GCP Project
@@ -70,4 +71,8 @@ resource "google_firebase_web_app" "auth" {
   provider     = google-beta
   project      = var.project_id
   display_name = "My Web app"
+
+  depends_on = [
+    google_identity_platform_config.auth_config
+  ]
 }

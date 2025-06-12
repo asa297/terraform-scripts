@@ -4,12 +4,11 @@
 variable "project_id" { type = string }
 variable "project_name" { type = string }
 variable "billing_account" { type = string }
-variable "github_repos" { type = list(string) }
 variable "storage_bucket_name" { type = string }
 
 # เรียกใช้งาน Module ที่ 1: สร้าง Project
 module "gcp_project" {
-  source = "../../modules/gcp-project" # บอกที่อยู่ของ module
+  source = "../../../modules/gcp-project" # บอกที่อยู่ของ module
 
   project_id      = var.project_id
   project_name    = var.project_name
@@ -18,14 +17,14 @@ module "gcp_project" {
 
 # เรียกใช้งาน Module ที่ 2: ตั้งค่า Firebase
 module "firebase_auth" {
-  source = "../../modules/firebase-auth"
+  source = "../../../modules/firebase-auth"
 
   project_id = module.gcp_project.project_id
 }
 
 # 5. เรียกใช้งาน Module ที่ 5: สร้าง Cloud Storage Bucket
 module "artifact_storage" {
-  source     = "../../modules/gcs-bucket"
+  source     = "../../../modules/gcs-bucket"
   project_id = var.project_id
   name       = var.storage_bucket_name
 

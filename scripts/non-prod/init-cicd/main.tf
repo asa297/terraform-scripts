@@ -6,8 +6,19 @@ variable "workload_identity_pool_id" { type = string }
 variable "service_account_id" { type = string }
 variable "github_owner" { type = string }
 variable "github_repos" { type = list(string) }
+variable "gar_location" { type = string }
+variable "gar_repository_name" { type = string }
 
-# 3. สร้าง Workload Identity Pool และ Provider (ทำครั้งเดียวต่อโปรเจกต์)
+# เพิ่ม resource นี้เข้าไปเพื่อเปิดใช้งาน Artifact Registry API
+resource "google_project_service" "apis" {
+  project                    = var.project_id
+  for_each                   = toset(["artifactregistry.googleapis.com"])
+  service                    = each.key
+  disable_dependent_services = false
+  disable_on_destroy         = false
+}
+
+# สร้าง Workload Identity Pool และ Provider (ทำครั้งเดียวต่อโปรเจกต์)
 resource "google_iam_workload_identity_pool" "github_pool" {
   project                   = var.project_id
   workload_identity_pool_id = var.workload_identity_pool_id
@@ -67,4 +78,17 @@ resource "google_project_iam_member" "github_sa_artifact_registry_admin" {
   project = var.project_id
   role    = "roles/artifactregistry.admin"
   member  = google_service_account.github_actions_sa.member
+}
+
+# สร้าง Artifact Registry Repository สำหรับเก็บ Docker images
+resource "google_artifact_registry_repository" "my_repository" {
+  project = var.project_id
+
+  location = var.gar_location
+
+  repository_id = var.gar_repository_name
+
+  format = "DOCKER"
+
+  depends_on = [google_project_service.apis]
 }

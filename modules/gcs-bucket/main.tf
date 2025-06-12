@@ -13,6 +13,8 @@ resource "google_storage_bucket" "bucket" {
 
   public_access_prevention = "enforced" # Best practice: ป้องกันการตั้งค่าเป็น public โดยไม่ได้ตั้งใจ
 
+  force_destroy = true
+
   dynamic "lifecycle_rule" {
     for_each = var.lifecycle_rules # วนลูปตาม list ของ rules ที่รับเข้ามา
 

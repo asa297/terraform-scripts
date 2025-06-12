@@ -29,11 +29,18 @@ resource "google_service_account" "cloud_run_app_sa" {
   display_name = "Service Account for Cloud Run App"
 }
 
-# --- 2. ให้สิทธิ์ SA นี้ในการเข้าถึง Cloud Storage ---
+# --- 2. ให้สิทธิ์ SA, IAM นี้ในการเข้าถึง Cloud Storage ---
 resource "google_storage_bucket_iam_member" "cloud_run_access" {
   bucket = var.bucket_name
   role   = "roles/storage.objectAdmin"
   member = google_service_account.cloud_run_app_sa.member
+}
+resource "google_project_iam_member" "cloud_run_bucket_lister" {
+  project = var.project_id
+  role    = "roles/storage.objectAdmin"
+  member  = google_service_account.cloud_run_app_sa.member
+
+  depends_on = [google_service_account.cloud_run_app_sa]
 }
 
 # --- 3. สร้าง "กล่อง" Secret ที่ว่างเปล่า ---

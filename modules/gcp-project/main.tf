@@ -6,5 +6,5 @@ resource "google_project" "new_project" {
   billing_account = var.billing_account
 
   # delete this project when the resource is destroyed (when you run `terraform destroy`)
-  # deletion_policy = "DELETE"
+  deletion_policy = "DELETE"
 }
