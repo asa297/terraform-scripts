@@ -9,10 +9,10 @@ variable "github_repos" { type = list(string) }
 variable "gar_location" { type = string }
 variable "gar_repository_name" { type = string }
 
-# เพิ่ม resource นี้เข้าไปเพื่อเปิดใช้งาน Artifact Registry API
+# เพิ่ม resource สำหรับเปิดใช้งาน API ที่จำเป็น
 resource "google_project_service" "apis" {
   project                    = var.project_id
-  for_each                   = toset(["artifactregistry.googleapis.com"])
+  for_each                   = toset(["iamcredentials.googleapis.com", "artifactregistry.googleapis.com"])
   service                    = each.key
   disable_dependent_services = false
   disable_on_destroy         = false
