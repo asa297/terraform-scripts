@@ -59,6 +59,15 @@ resource "google_identity_platform_config" "auth_config" {
     email {
       enabled = true
     }
+
+    phone_number {
+      enabled            = false
+      test_phone_numbers = {}
+    }
+  }
+
+  multi_tenant {
+    allow_tenants = false
   }
 
   depends_on = [
