@@ -25,5 +25,5 @@ variable "region" {
 variable "pubsub_topics" {
   description = "List of Pub/Sub topics to create"
   type        = list(string)
-  default     = ["submit_print", "sync_print_status"]
+  default     = ["printer_queue_agent", "submit_print", "sync_print_status"]
 }
