@@ -33,7 +33,7 @@ module "artifact_storage" {
     {
       # สำหรับ path /temp-uploads/
       prefix      = "temp-uploads/" # อย่าลืมใส่ / ปิดท้าย
-      age_in_days = 30
+      age_in_days = 7
     },
   ]
 
