@@ -91,4 +91,24 @@ resource "google_artifact_registry_repository" "my_repository" {
   format = "DOCKER"
 
   depends_on = [google_project_service.apis]
+
+  cleanup_policy_dry_run = false
+
+  cleanup_policies {
+    id     = "keep-10-latest"
+    action = "KEEP"
+
+    most_recent_versions {
+      keep_count = 10
+    }
+  }
+
+  cleanup_policies {
+    id     = "delete-others"
+    action = "DELETE"
+
+    condition {
+      tag_state = "ANY"
+    }
+  }
 }
